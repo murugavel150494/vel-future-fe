@@ -1,0 +1,55 @@
+<div class="studio-container">
+  <header class="studio-header">
+    <div class="header-left">
+      <button class="back-btn" (click)="goHome()">&larr; Dashboard</button>
+      <span class="badge top10">Top 10 Automation Hub</span>
+    </div>
+    <div class="header-title">
+      <h2>Top 10 Video & Thumbnail Studio</h2>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <p class="section-desc">Trigger automated rendering pipelines for countdown list videos.</p>
+
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="card-icon">🔥</div>
+        <div class="card-info">
+          <h3>Create Top 10 Video</h3>
+          <p>Compile countdown clips, automated voiceovers, and transitions into a full video.</p>
+          <button 
+            class="btn-primary" 
+            [disabled]="loadingVideo" 
+            (click)="triggerAction('create-top10-video', 'Top 10 Video')">
+            {{ loadingVideo ? 'Rendering Video...' : 'Generate Top 10 Video' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="card-icon">🎨</div>
+        <div class="card-info">
+          <h3>Create Top 10 Thumbnail</h3>
+          <p>Design striking countdown thumbnails optimized for high click-through rates.</p>
+          <button 
+            class="btn-secondary" 
+            [disabled]="loadingThumbnail" 
+            (click)="triggerAction('create-top10-thumbnail', 'Top 10 Thumbnail')">
+            {{ loadingThumbnail ? 'Generating Thumbnail...' : 'Generate Thumbnail' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="responseMessage" class="status-box success">
+      <h4>Success Response:</h4>
+      <pre>{{ responseMessage | json }}</pre>
+    </div>
+
+    <div *ngIf="errorMessage" class="status-box error">
+      <h4>Error:</h4>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </main>
+</div>

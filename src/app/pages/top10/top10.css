@@ -1,0 +1,26 @@
+.studio-container { min-height: 100vh; width: 100vw; background-color: #0f0f0f; color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; box-sizing: border-box; }
+.studio-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; background: #1f1f1f; border-bottom: 1px solid #333; flex-wrap: wrap; gap: 15px; }
+.header-left { display: flex; align-items: center; gap: 20px; }
+.back-btn { background: #272727; border: 1px solid #3f3f3f; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; }
+.back-btn:hover { background: #3f3f3f; }
+.badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+.badge.top10 { background: rgba(237, 137, 54, 0.2); color: #ed8936; }
+.header-title h2 { margin: 0; font-size: 1.5rem; font-weight: 600; }
+.workspace { flex: 1; padding: 40px; max-width: 1400px; width: 100%; margin: 0 auto; box-sizing: border-box; }
+.section-desc { color: #aaa; margin-bottom: 30px; font-size: 1.1rem; }
+.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-bottom: 30px; }
+.action-card { background: #1f1f1f; border: 1px solid #333; border-radius: 16px; padding: 30px; display: flex; gap: 20px; align-items: flex-start; }
+.action-card:hover { border-color: #ed8936; }
+.card-icon { font-size: 40px; background: rgba(237, 137, 54, 0.1); padding: 15px; border-radius: 12px; }
+.card-info { flex: 1; }
+.card-info h3 { margin: 0 0 10px 0; font-size: 1.3rem; }
+.card-info p { color: #aaa; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.4; }
+.btn-primary { background-color: #ed8936; color: white; border: none; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; }
+.btn-primary:hover:not(:disabled) { opacity: 0.9; }
+.btn-secondary { background-color: #2d3748; color: white; border: 1px solid #4a5568; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; }
+.btn-secondary:hover:not(:disabled) { background-color: #4a5568; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+.status-box { margin-top: 30px; padding: 20px; border-radius: 12px; }
+.status-box.success { background: #3c2a17; border: 1px solid #ed8936; }
+.status-box.error { background: #552121; border: 1px solid #fc8181; color: #fed7d7; }
+pre { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 6px; overflow-x: auto; }

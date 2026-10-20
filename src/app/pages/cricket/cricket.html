@@ -1,0 +1,77 @@
+<div class="studio-container">
+  <header class="studio-header">
+    <div class="header-left">
+      <button class="back-btn" (click)="goHome()">&larr; Dashboard</button>
+      <span class="badge cricket">Cricket Automation Hub</span>
+    </div>
+    <div class="header-title">
+      <h2>Cricket Production Studio</h2>
+      <span class="date-badge">Target Date: {{ todayFormatted }}</span>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <p class="section-desc">Manage your automated video pipeline, channel thumbnails, and metadata optimization.</p>
+
+    <div class="action-grid">
+      <!-- 1. Generate Video Card -->
+      <div class="action-card">
+        <div class="card-icon video-icon">🎬</div>
+        <div class="card-info">
+          <h3>Generate Video</h3>
+          <p class="date-label">For Date: <strong>{{ todayFormatted }}</strong></p>
+          <p class="card-desc">Compile scripts, voiceovers, and FFmpeg layouts into an MP4 video.</p>
+          <button 
+            class="btn-primary" 
+            [disabled]="loadingVideo" 
+            (click)="triggerAction('create-video', 'Cricket News Video')">
+            {{ loadingVideo ? 'Rendering & Downloading...' : 'Generate Video for Today (' + todayFormatted + ')' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Create Thumbnail Card -->
+      <div class="action-card">
+        <div class="card-icon thumb-icon">🎨</div>
+        <div class="card-info">
+          <h3>Create Thumbnail</h3>
+          <p class="date-label">For Date: <strong>{{ todayFormatted }}</strong></p>
+          <p class="card-desc">Design high-clickthrough-rate custom thumbnails with match highlights.</p>
+          <button 
+            class="btn-secondary" 
+            [disabled]="loadingThumbnail" 
+            (click)="triggerAction('create-thumbnail', 'Cricket Thumbnail')">
+            {{ loadingThumbnail ? 'Designing...' : 'Create Thumbnail for Today (' + todayFormatted + ')' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Create SEO Card -->
+      <div class="action-card">
+        <div class="card-icon seo-icon">📈</div>
+        <div class="card-info">
+          <h3>Create SEO Metadata</h3>
+          <p class="date-label">For Date: <strong>{{ todayFormatted }}</strong></p>
+          <p class="card-desc">Generate optimized YouTube video titles, tags, and descriptions.</p>
+          <button 
+            class="btn-accent" 
+            [disabled]="loadingSeo" 
+            (click)="triggerAction('create-seo', 'Cricket SEO')">
+            {{ loadingSeo ? 'Generating SEO...' : 'Create SEO for Today (' + todayFormatted + ')' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Feedback Areas -->
+    <div *ngIf="responseMessage" class="status-box success">
+      <h4>Success Response ({{ responseMessage.action }}):</h4>
+      <pre>{{ responseMessage.result | json }}</pre>
+    </div>
+
+    <div *ngIf="errorMessage" class="status-box error">
+      <h4>Execution Error:</h4>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </main>
+</div>
