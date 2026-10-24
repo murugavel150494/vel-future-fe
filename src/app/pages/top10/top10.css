@@ -1,26 +1,246 @@
-.studio-container { min-height: 100vh; width: 100vw; background-color: #0f0f0f; color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; box-sizing: border-box; }
-.studio-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; background: #1f1f1f; border-bottom: 1px solid #333; flex-wrap: wrap; gap: 15px; }
-.header-left { display: flex; align-items: center; gap: 20px; }
-.back-btn { background: #272727; border: 1px solid #3f3f3f; color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; }
-.back-btn:hover { background: #3f3f3f; }
-.badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-.badge.top10 { background: rgba(237, 137, 54, 0.2); color: #ed8936; }
-.header-title h2 { margin: 0; font-size: 1.5rem; font-weight: 600; }
-.workspace { flex: 1; padding: 40px; max-width: 1400px; width: 100%; margin: 0 auto; box-sizing: border-box; }
-.section-desc { color: #aaa; margin-bottom: 30px; font-size: 1.1rem; }
-.action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-bottom: 30px; }
-.action-card { background: #1f1f1f; border: 1px solid #333; border-radius: 16px; padding: 30px; display: flex; gap: 20px; align-items: flex-start; }
-.action-card:hover { border-color: #ed8936; }
-.card-icon { font-size: 40px; background: rgba(237, 137, 54, 0.1); padding: 15px; border-radius: 12px; }
-.card-info { flex: 1; }
-.card-info h3 { margin: 0 0 10px 0; font-size: 1.3rem; }
-.card-info p { color: #aaa; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.4; }
-.btn-primary { background-color: #ed8936; color: white; border: none; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; }
-.btn-primary:hover:not(:disabled) { opacity: 0.9; }
-.btn-secondary { background-color: #2d3748; color: white; border: 1px solid #4a5568; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; }
-.btn-secondary:hover:not(:disabled) { background-color: #4a5568; }
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-.status-box { margin-top: 30px; padding: 20px; border-radius: 12px; }
-.status-box.success { background: #3c2a17; border: 1px solid #ed8936; }
-.status-box.error { background: #552121; border: 1px solid #fc8181; color: #fed7d7; }
-pre { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 6px; overflow-x: auto; }
+/* ==========================================================================
+   Elite Top 10 Dashboard - World's Best Glassmorphism Design
+   ========================================================================== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #030712;
+  background-image: 
+    radial-gradient(circle at 80% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 20% 90%, rgba(239, 68, 68, 0.08) 0%, transparent 40%);
+  color: #f8fafc;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.elite-container {
+  max-width: 1150px;
+  margin: 0 auto;
+  padding: 50px 24px;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header-badge {
+  display: inline-block;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.header-section h2 {
+  font-size: 34px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.header-section p {
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+/* Glass Card */
+.glass-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+.card-header {
+  background: rgba(30, 41, 59, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 18px 24px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.card-body {
+  padding: 28px;
+}
+
+/* Form Elements */
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  font-size: 18px;
+}
+
+.elite-input {
+  width: 100%;
+  background: rgba(10, 15, 30, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px 16px 16px 52px;
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.elite-input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+}
+
+/* Button Elite */
+.btn-elite {
+  margin-top: 20px;
+  width: 100%;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-elite:hover:not(:disabled) {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.5);
+}
+
+.btn-elite:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Video & Items Layout */
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+.elite-video-player {
+  width: 100%;
+  border-radius: 12px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+
+.scrollable-body {
+  max-height: 450px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.rank-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: rgba(10, 15, 30, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+
+.rank-item:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.rank-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-weight: 800;
+  font-size: 15px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  min-width: 44px;
+  text-align: center;
+}
+
+.rank-content h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.rank-content p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+/* Alert */
+.elite-alert {
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.elite-alert.error {
+  background: rgba(127, 29, 29, 0.4);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}

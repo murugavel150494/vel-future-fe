@@ -1,15 +1,193 @@
-.dashboard-container { min-height: 100vh; background-color: #0f0f0f; color: #ffffff; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; width: 100vw; }
-.header { text-align: center; margin-bottom: 50px; }
-.logo-area { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
-.logo-icon { font-size: 36px; }
-h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.5px; margin: 0; }
-.subtitle { color: #aaa; font-size: 1.1rem; margin-top: 5px; }
-.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; width: 100%; max-width: 900px; }
-.menu-card { background: #1f1f1f; border: 1px solid #333; border-radius: 16px; padding: 30px; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease; display: flex; flex-direction: column; gap: 20px; }
-.menu-card:hover { transform: translateY(-5px); border-color: #ff0000; background: #252525; }
-.card-icon { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-.cricket-bg { background: rgba(56, 178, 172, 0.15); color: #38b2ac; }
-.top10-bg { background: rgba(237, 137, 54, 0.15); color: #ed8936; }
-.card-content h3 { font-size: 1.5rem; margin: 0 0 10px 0; }
-.card-content p { color: #aaa; font-size: 0.95rem; line-height: 1.5; margin: 0 0 20px 0; }
-.action-link { color: #3ea6ff; font-weight: 600; font-size: 0.95rem; }
+/* ==========================================================================
+   Elite Home Dashboard - World's Best Dark Glassmorphism Design
+   ========================================================================== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #030712;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+  color: #f8fafc;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.elite-dashboard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+/* Hero Section */
+.dashboard-hero {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+.dashboard-hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
+  color: #f1f5f9;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dashboard-hero p {
+  color: #94a3b8;
+  font-size: 17px;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Pipeline Grid */
+.pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 32px;
+}
+
+.pipeline-card {
+  position: relative;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 36px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pipeline-card:hover:not(.disabled) {
+  transform: translateY(-8px);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.1);
+}
+
+.pipeline-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Card Glow Effect */
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(56, 189, 248, 0.06), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.pipeline-card:hover .card-glow {
+  opacity: 1;
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.card-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-indicator.active {
+  background: #10b981;
+  box-shadow: 0 0 12px #10b981;
+}
+
+.card-body h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+
+.card-body p {
+  color: #94a3b8;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.card-action {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.launch-btn {
+  color: #38bdf8;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap 0.2s ease;
+}
+
+.launch-btn .arrow {
+  transition: transform 0.2s ease;
+}
+
+.pipeline-card:hover .launch-btn .arrow {
+  transform: translateX(6px);
+}
+
+.soon-badge {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}

@@ -1,49 +1,68 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrls: ['./login.css']
 })
 export class Login {
   private router = inject(Router);
-  private authService = inject(AuthService);
+  private http = inject(HttpClient);
+  
+  // Backend running on port 3001
+  private apiBaseUrl = 'http://localhost:3001/api/auth';
 
-  private readonly ALLOWED_USERNAME = 'admin';
-  private readonly ALLOWED_PASSWORD = 'password123';
+  username = signal<string>('');
+  password = signal<string>('');
+  isLoading = signal<boolean>(false);
+  errorMessage = signal<string | null>(null);
 
-  username = '';
-  password = '';
-  isLoading = false;
-  errorMessage: string | null = null;
+  updateUsername(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.username.set(input.value);
+  }
 
-  onLogin(): void {
-    if (!this.username || !this.password) {
-      this.errorMessage = 'Please enter both username and password.';
+  updatePassword(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.password.set(input.value);
+  }
+
+  onLogin(event: Event): void {
+    event.preventDefault();
+
+    if (!this.username().trim() || !this.password().trim()) {
+      this.errorMessage.set('Please provide username and password.');
       return;
     }
 
-    this.isLoading = true;
-    this.errorMessage = null;
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
 
-    setTimeout(() => {
-      this.isLoading = false;
-
-      if (
-        this.username.trim() === this.ALLOWED_USERNAME &&
-        this.password === this.ALLOWED_PASSWORD
-      ) {
-        this.authService.login();
-        this.router.navigate(['/home']);
-      } else {
-        this.errorMessage = 'Invalid username or password. Please try again.';
+    this.http.post<any>(`${this.apiBaseUrl}/login`, { 
+      username: this.username(), 
+      password: this.password() 
+    }).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        if (res.success) {
+          localStorage.setItem('authToken', res.token);
+          localStorage.setItem('currentUser', JSON.stringify(res.user));
+          
+          // 🔒 CRITICAL: replaceUrl: true prevents back-button navigation to login
+          this.router.navigate(['/home'], { replaceUrl: true });
+        } else {
+          this.errorMessage.set(res.message || 'Authentication failed.');
+        }
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        console.error('Backend Login Error:', err);
+        this.errorMessage.set(err?.error?.message || 'Connection refused. Ensure backend is running on port 3001.');
       }
-    }, 600);
+    });
   }
 }

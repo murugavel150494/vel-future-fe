@@ -1,55 +1,84 @@
-<div class="studio-container">
-  <header class="studio-header">
-    <div class="header-left">
-      <button class="back-btn" (click)="goHome()">&larr; Dashboard</button>
-      <span class="badge top10">Top 10 Automation Hub</span>
-    </div>
-    <div class="header-title">
-      <h2>Top 10 Video & Thumbnail Studio</h2>
-    </div>
-  </header>
+<div class="elite-container">
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-badge">🔥 Viral Countdown Engine</div>
+    <h2>Top 10 Video Generator</h2>
+    <p>Automate script writing, voiceover generation, and cinematic countdown layouts in seconds.</p>
+  </div>
 
-  <main class="workspace">
-    <p class="section-desc">Trigger automated rendering pipelines for countdown list videos.</p>
-
-    <div class="action-grid">
-      <div class="action-card">
-        <div class="card-icon">🔥</div>
-        <div class="card-info">
-          <h3>Create Top 10 Video</h3>
-          <p>Compile countdown clips, automated voiceovers, and transitions into a full video.</p>
-          <button 
-            class="btn-primary" 
-            [disabled]="loadingVideo" 
-            (click)="triggerAction('create-top10-video', 'Top 10 Video')">
-            {{ loadingVideo ? 'Rendering Video...' : 'Generate Top 10 Video' }}
-          </button>
+  <!-- Input Card -->
+  <div class="glass-card input-card">
+    <div class="card-body">
+      <div class="form-group">
+        <label for="topic">Enter Video Topic / Title Prompt</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🎯</span>
+          <input 
+            id="topic"
+            type="text" 
+            class="elite-input" 
+            placeholder="e.g. Top 10 Most Shocking Moments in IPL History" 
+            [value]="topicInput()" 
+            (input)="updateTopic($event)"
+            [disabled]="isLoading()" />
         </div>
       </div>
 
-      <div class="action-card">
-        <div class="card-icon">🎨</div>
-        <div class="card-info">
-          <h3>Create Top 10 Thumbnail</h3>
-          <p>Design striking countdown thumbnails optimized for high click-through rates.</p>
-          <button 
-            class="btn-secondary" 
-            [disabled]="loadingThumbnail" 
-            (click)="triggerAction('create-top10-thumbnail', 'Top 10 Thumbnail')">
-            {{ loadingThumbnail ? 'Generating Thumbnail...' : 'Generate Thumbnail' }}
-          </button>
+      <button 
+        class="btn-elite" 
+        (click)="onGenerateTop10()" 
+        [disabled]="isLoading()">
+        @if (!isLoading()) {
+          <span>🔥 Launch Top 10 Pipeline</span>
+        } @else {
+          <span class="spinner"></span>
+          <span>Rendering Viral Video...</span>
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  @if (errorMessage()) {
+    <div class="elite-alert error">
+      <span>⚠️</span> {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Results Section -->
+  @if (response(); as res) {
+    <div class="results-grid">
+      @if (res.videoPath) {
+        <div class="glass-card video-card">
+          <div class="card-header">
+            <h3>📹 Rendered Video Preview</h3>
+          </div>
+          <div class="card-body">
+            <video controls class="elite-video-player" [src]="res.videoPath">
+              Your browser does not support the video tag.
+            </video>
+          </div>
         </div>
-      </div>
-    </div>
+      }
 
-    <div *ngIf="responseMessage" class="status-box success">
-      <h4>Success Response:</h4>
-      <pre>{{ responseMessage | json }}</pre>
+      @if (res.items && res.items.length > 0) {
+        <div class="glass-card items-card">
+          <div class="card-header">
+            <h3>📋 Ranked Items & Script Breakdown</h3>
+          </div>
+          <div class="card-body scrollable-body">
+            @for (item of res.items; track item.rank) {
+              <div class="rank-item">
+                <div class="rank-badge">#{{ item.rank }}</div>
+                <div class="rank-content">
+                  <h4>{{ item.title }}</h4>
+                  <p>{{ item.description }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
     </div>
-
-    <div *ngIf="errorMessage" class="status-box error">
-      <h4>Error:</h4>
-      <p>{{ errorMessage }}</p>
-    </div>
-  </main>
+  }
 </div>

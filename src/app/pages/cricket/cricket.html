@@ -1,77 +1,198 @@
-<div class="studio-container">
-  <header class="studio-header">
-    <div class="header-left">
-      <button class="back-btn" (click)="goHome()">&larr; Dashboard</button>
-      <span class="badge cricket">Cricket Automation Hub</span>
-    </div>
-    <div class="header-title">
-      <h2>Cricket Production Studio</h2>
-      <span class="date-badge">Target Date: {{ todayFormatted }}</span>
-    </div>
+<div class="elite-cricket-container">
+  
+  <!-- Page Header -->
+  <header class="pipeline-header">
+    <div class="header-badge">🏏 Live Broadcast AI Engine</div>
+    <h2>Automated Cricket News Pipeline</h2>
+    <p>Generate broadcast-grade Tamil news videos, high-CTR YouTube metadata, and AI thumbnail concepts in one click.</p>
   </header>
 
-  <main class="workspace">
-    <p class="section-desc">Manage your automated video pipeline, channel thumbnails, and metadata optimization.</p>
+  <!-- Action Control Bar -->
+  <div class="control-action-bar">
+    <button 
+      class="btn-elite-primary" 
+      (click)="onGenerateVideo()" 
+      [disabled]="isLoading()">
+      @if (!isLoading()) {
+        <span class="btn-icon">🎬</span>
+        <span>Generate Video & SEO Pipeline</span>
+      } @else {
+        <span class="spinner"></span>
+        <span>Synthesizing Voice & Rendering Video...</span>
+      }
+    </button>
+  </div>
 
-    <div class="action-grid">
-      <!-- 1. Generate Video Card -->
-      <div class="action-card">
-        <div class="card-icon video-icon">🎬</div>
-        <div class="card-info">
-          <h3>Generate Video</h3>
-          <p class="date-label">For Date: <strong>{{ todayFormatted }}</strong></p>
-          <p class="card-desc">Compile scripts, voiceovers, and FFmpeg layouts into an MP4 video.</p>
-          <button 
-            class="btn-primary" 
-            [disabled]="loadingVideo" 
-            (click)="triggerAction('create-video', 'Cricket News Video')">
-            {{ loadingVideo ? 'Rendering & Downloading...' : 'Generate Video for Today (' + todayFormatted + ')' }}
-          </button>
+  <!-- Error Alert -->
+  @if (errorMessage()) {
+    <div class="elite-alert error">
+      <span>⚠️</span> {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Results Pipeline Grid -->
+  @if (response(); as res) {
+    <div class="pipeline-results-grid">
+      
+      <!-- Left Column: Video Preview & Download -->
+      <div class="glass-card video-column-card">
+        <div class="card-header">
+          <h3>📹 Rendered News Video</h3>
+          <span class="live-tag">MP4 1080p</span>
+        </div>
+        <div class="card-body">
+          <div class="video-wrapper">
+            <video 
+              controls 
+              class="elite-video-preview" 
+              [src]="getVideoUrl(res.videoPath)">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+
+          <div class="video-actions">
+            <a 
+              [href]="getVideoUrl(res.videoPath)" 
+              [download]="res.videoPath" 
+              class="btn-elite-success">
+              <span>⬇️ Download Final MP4 Video</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      <!-- 2. Create Thumbnail Card -->
-      <div class="action-card">
-        <div class="card-icon thumb-icon">🎨</div>
-        <div class="card-info">
-          <h3>Create Thumbnail</h3>
-          <p class="date-label">For Date: <strong>{{ todayFormatted }}</strong></p>
-          <p class="card-desc">Design high-clickthrough-rate custom thumbnails with match highlights.</p>
-          <button 
-            class="btn-secondary" 
-            [disabled]="loadingThumbnail" 
-            (click)="triggerAction('create-thumbnail', 'Cricket Thumbnail')">
-            {{ loadingThumbnail ? 'Designing...' : 'Create Thumbnail for Today (' + todayFormatted + ')' }}
-          </button>
+      <!-- Right Column: YouTube SEO Metadata -->
+      @if (res.seoDetails; as seo) {
+        <div class="glass-card seo-column-card">
+          <div class="card-header">
+            <h3>🚀 YouTube SEO Metadata</h3>
+            <span class="ai-tag">Gemini Optimized</span>
+          </div>
+          <div class="card-body scrollable-card-body">
+
+            <!-- Best Title -->
+            <div class="seo-field-group">
+              <div class="field-label-row">
+                <label>Best Optimized Title</label>
+                <button class="btn-copy-sm" (click)="copyToClipboard(seo.bestTitle, 'bestTitle')">
+                  {{ copiedKey() === 'bestTitle' ? '✓ Copied!' : '📋 Copy' }}
+                </button>
+              </div>
+              <div class="elite-box highlight-box">{{ seo.bestTitle }}</div>
+            </div>
+
+            <!-- Alternative Titles -->
+            <div class="seo-field-group">
+              <div class="field-label-row">
+                <label>Alternative Titles</label>
+                <button class="btn-copy-sm" (click)="copyToClipboard(getFormattedTitles(), 'altTitles')">
+                  {{ copiedKey() === 'altTitles' ? '✓ Copied All' : '📋 Copy All' }}
+                </button>
+              </div>
+              @for (altTitle of seo.alternativeTitles; track $index) {
+                <div class="alt-title-row">
+                  <span>{{ altTitle }}</span>
+                  <button class="btn-copy-tiny" (click)="copyToClipboard(altTitle, 'altTitle_' + $index)">
+                    {{ copiedKey() === ('altTitle_' + $index) ? '✓' : 'Copy' }}
+                  </button>
+                </div>
+              }
+            </div>
+
+            <!-- Description -->
+            <div class="seo-field-group">
+              <div class="field-label-row">
+                <label>Video Description</label>
+                <button class="btn-copy-sm" (click)="copyToClipboard(seo.description, 'description')">
+                  {{ copiedKey() === 'description' ? '✓ Copied!' : '📋 Copy' }}
+                </button>
+              </div>
+              <div class="elite-box text-description">{{ seo.description }}</div>
+            </div>
+
+            <!-- Tags -->
+            <div class="seo-field-group">
+              <div class="field-label-row">
+                <label>Tags</label>
+                <button class="btn-copy-sm" (click)="copyToClipboard(getFormattedTags(), 'tags')">
+                  {{ copiedKey() === 'tags' ? '✓ Copied!' : '📋 Copy Tags' }}
+                </button>
+              </div>
+              <div class="tag-cloud">
+                @for (tag of seo.tags; track tag) {
+                  <span class="tag-badge">#{{ tag }}</span>
+                }
+              </div>
+            </div>
+
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <!-- Bottom Full Width Row: AI Thumbnail Concepts -->
+    @if (res.thumbnailDetails; as thumb) {
+      <div class="glass-card thumbnail-full-card">
+        <div class="card-header">
+          <h3>🖼️ High-CTR AI Thumbnail Concepts</h3>
+          <span class="ai-tag">Visual Prompt Engine</span>
+        </div>
+        <div class="card-body">
+          <div class="thumbnail-options-grid">
+
+            <!-- Primary Option -->
+            @if (thumb.primaryOption; as primary) {
+              <div class="concept-box primary-concept">
+                <div class="concept-header-row">
+                  <span class="concept-title">⭐ Primary Concept</span>
+                  <button class="btn-copy-sm" (click)="copyToClipboard(getFormattedThumbnailConcept(primary), 'primaryConcept')">
+                    {{ copiedKey() === 'primaryConcept' ? '✓ Copied Concept' : '📋 Copy Concept' }}
+                  </button>
+                </div>
+                
+                <div class="elite-box consolidated-box">
+                  <div class="concept-inner-row">
+                    <span class="c-label">Tamil Heading</span>
+                    <span class="c-heading-text">{{ primary.headingText }}</span>
+                  </div>
+                  <div class="concept-divider"></div>
+                  <div class="concept-inner-row">
+                    <span class="c-label">AI Visual Prompt</span>
+                    <span class="c-prompt-text">{{ primary.visualPrompt }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Secondary Option -->
+            @if (thumb.secondaryOption; as secondary) {
+              <div class="concept-box secondary-concept">
+                <div class="concept-header-row">
+                  <span class="concept-title">💡 Secondary Concept</span>
+                  <button class="btn-copy-sm" (click)="copyToClipboard(getFormattedThumbnailConcept(secondary), 'secondaryConcept')">
+                    {{ copiedKey() === 'secondaryConcept' ? '✓ Copied Concept' : '📋 Copy Concept' }}
+                  </button>
+                </div>
+
+                <div class="elite-box consolidated-box">
+                  <div class="concept-inner-row">
+                    <span class="c-label">Tamil Heading</span>
+                    <span class="c-heading-text">{{ secondary.headingText }}</span>
+                  </div>
+                  <div class="concept-divider"></div>
+                  <div class="concept-inner-row">
+                    <span class="c-label">AI Visual Prompt</span>
+                    <span class="c-prompt-text">{{ secondary.visualPrompt }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+
+          </div>
         </div>
       </div>
+    }
+  }
 
-      <!-- 3. Create SEO Card -->
-      <div class="action-card">
-        <div class="card-icon seo-icon">📈</div>
-        <div class="card-info">
-          <h3>Create SEO Metadata</h3>
-          <p class="date-label">For Date: <strong>{{ todayFormatted }}</strong></p>
-          <p class="card-desc">Generate optimized YouTube video titles, tags, and descriptions.</p>
-          <button 
-            class="btn-accent" 
-            [disabled]="loadingSeo" 
-            (click)="triggerAction('create-seo', 'Cricket SEO')">
-            {{ loadingSeo ? 'Generating SEO...' : 'Create SEO for Today (' + todayFormatted + ')' }}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Status Feedback Areas -->
-    <div *ngIf="responseMessage" class="status-box success">
-      <h4>Success Response ({{ responseMessage.action }}):</h4>
-      <pre>{{ responseMessage.result | json }}</pre>
-    </div>
-
-    <div *ngIf="errorMessage" class="status-box error">
-      <h4>Execution Error:</h4>
-      <p>{{ errorMessage }}</p>
-    </div>
-  </main>
 </div>

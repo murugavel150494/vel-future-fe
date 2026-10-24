@@ -1,96 +1,102 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+
+export interface ThumbnailOption {
+  headingText: string;
+  visualPrompt: string;
+}
+
+export interface ThumbnailDetails {
+  primaryOption: ThumbnailOption;
+  secondaryOption: ThumbnailOption;
+}
+
+export interface SeoDetails {
+  bestTitle: string;
+  alternativeTitles: string[];
+  description: string;
+  tags: string[];
+}
+
+export interface VideoApiResponse {
+  success: boolean;
+  message: string;
+  videoPath: string;
+  seoDetails: SeoDetails;
+  thumbnailDetails: ThumbnailDetails;
+  timestamp: string;
+}
 
 @Component({
   selector: 'app-cricket',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './cricket.html',
-  styleUrl: './cricket.css'
+  styleUrls: ['./cricket.css']
 })
-export class Cricket implements OnInit {
+export class CricketComponent {
   private http = inject(HttpClient);
-  private router = inject(Router);
+  private apiBaseUrl = 'http://localhost:3001/api/cricket';
 
-  loadingVideo = false;
-  loadingThumbnail = false;
-  loadingSeo = false;
-  responseMessage: any = null;
-  errorMessage: string | null = null;
-  
-  todayFormatted = '';
-  // private backendUrl = 'http://localhost:3001/api/cricket';
-  private backendUrl = 'https://vel-future.onrender.com/api/cricket';
+  // Angular 22 Signals
+  isLoading = signal<boolean>(false);
+  response = signal<VideoApiResponse | null>(null);
+  errorMessage = signal<string | null>(null);
+  copiedKey = signal<string | null>(null);
 
-  ngOnInit(): void {
-    // Generate today's date in DD-MM-YYYY format (e.g., 20-10-2026)
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    this.todayFormatted = `${dd}-${mm}-${yyyy}`;
+  onGenerateVideo(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+    this.response.set(null);
+
+    this.http.post<VideoApiResponse>(`${this.apiBaseUrl}/create-video`, {}).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        if (res.success) {
+          this.response.set(res);
+        } else {
+          this.errorMessage.set('Failed to generate video pipeline.');
+        }
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        console.error('API Error:', err);
+        this.errorMessage.set(err?.error?.error || err?.message || 'An error occurred while calling the video generator endpoint.');
+      }
+    });
   }
 
-  goHome(): void {
-    this.router.navigate(['/home']);
+  getVideoUrl(videoPath: string): string {
+    return `${this.apiBaseUrl}/download-video/${encodeURIComponent(videoPath)}`;
   }
 
-  triggerAction(endpoint: string, actionName: string): void {
-    const payload = { 
-      timestamp: new Date().toISOString(), 
-      dateTag: this.todayFormatted 
-    };
+  copyToClipboard(text: string, key: string): void {
+    if (!text) return;
 
-    if (endpoint === 'create-video') {
-      this.loadingVideo = true;
-      this.responseMessage = null;
-      this.errorMessage = null;
-
-      this.http.post(`${this.backendUrl}/${endpoint}`, payload, { responseType: 'blob' }).subscribe({
-        next: (blob: Blob) => {
-          this.loadingVideo = false; // Reset loading state instantly on success
-
-          const downloadUrl = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = downloadUrl;
-          link.download = `cricket-news-${this.todayFormatted}.mp4`;
-          
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(downloadUrl);
-
-          this.responseMessage = { 
-            action: actionName, 
-            result: `Video rendered and downloaded successfully for date: ${this.todayFormatted}` 
-          };
-        },
-        error: (err) => {
-          this.loadingVideo = false; // Reset loading state on error as well
-          this.errorMessage = `Failed to execute ${actionName}. Please check server logs.`;
+    navigator.clipboard.writeText(text).then(() => {
+      this.copiedKey.set(key);
+      setTimeout(() => {
+        if (this.copiedKey() === key) {
+          this.copiedKey.set(null);
         }
-      });
-    } else {
-      if (endpoint === 'create-thumbnail') this.loadingThumbnail = true;
-      if (endpoint === 'create-seo') this.loadingSeo = true;
+      }, 2000);
+    }).catch(err => {
+      console.error('Copy failed', err);
+    });
+  }
 
-      this.responseMessage = null;
-      this.errorMessage = null;
+  getFormattedTitles(): string {
+    const titles = this.response()?.seoDetails?.alternativeTitles;
+    return titles ? titles.join('\n') : '';
+  }
 
-      this.http.post<any>(`${this.backendUrl}/${endpoint}`, payload).subscribe({
-        next: (res) => {
-          this.loadingThumbnail = false;
-          this.loadingSeo = false;
-          this.responseMessage = { action: actionName, result: res };
-        },
-        error: (err) => {
-          this.loadingThumbnail = false;
-          this.loadingSeo = false;
-          this.errorMessage = `Failed to execute ${actionName}: ${err.message}`;
-        }
-      });
-    }
+  getFormattedTags(): string {
+    const tags = this.response()?.seoDetails?.tags;
+    return tags ? tags.join(', ') : '';
+  }
+
+  getFormattedThumbnailConcept(option?: ThumbnailOption): string {
+    if (!option) return '';
+    return `Heading: ${option.headingText}\nPrompt: ${option.visualPrompt}`;
   }
 }
