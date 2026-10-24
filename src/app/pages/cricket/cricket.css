@@ -42,8 +42,11 @@
   font-size: 36px;
   font-weight: 800;
   background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #34d399 100%);
+  /* Background Clip Compatibility */
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
   margin-bottom: 8px;
   letter-spacing: -0.5px;
 }

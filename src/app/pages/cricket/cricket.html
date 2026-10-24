@@ -2,7 +2,7 @@
   
   <!-- Page Header -->
   <header class="pipeline-header">
-    <div class="header-badge">🏏 Live Broadcast AI Engine</div>
+    <div class="header-badge">🏏 VEL Future • Live Broadcast AI Engine</div>
     <h2>Automated Cricket News Pipeline</h2>
     <p>Generate broadcast-grade Tamil news videos, high-CTR YouTube metadata, and AI thumbnail concepts in one click.</p>
   </header>
@@ -18,7 +18,7 @@
         <span>Generate Video & SEO Pipeline</span>
       } @else {
         <span class="spinner"></span>
-        <span>Synthesizing Voice & Rendering Video...</span>
+        <span>Cleaning Buffer & Rendering Video...</span>
       }
     </button>
   </div>
@@ -34,7 +34,7 @@
   @if (response(); as res) {
     <div class="pipeline-results-grid">
       
-      <!-- Left Column: Video Preview & Download -->
+      <!-- Left Column: Video Preview & Manual Download -->
       <div class="glass-card video-column-card">
         <div class="card-header">
           <h3>📹 Rendered News Video</h3>
@@ -53,9 +53,8 @@
           <div class="video-actions">
             <a 
               [href]="getVideoUrl(res.videoPath)" 
-              [download]="res.videoPath" 
               class="btn-elite-success">
-              <span>⬇️ Download Final MP4 Video</span>
+              <span>⬇️ Download MP4 Video</span>
             </a>
           </div>
         </div>
