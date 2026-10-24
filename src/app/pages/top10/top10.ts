@@ -23,7 +23,8 @@ export interface Top10ApiResponse {
 })
 export class Top10 {
   private http = inject(HttpClient);
-  private apiBaseUrl = 'http://localhost:3001/api/top10';
+  // private apiBaseUrl = 'http://localhost:3001/api/top10';
+  private apiBaseUrl ='https://vel-future.onrender.com/api/top10';
 
   // Angular 22 Reactive Signals
   topicInput = signal<string>('');

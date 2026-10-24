@@ -37,7 +37,7 @@ export interface VideoApiResponse {
 export class CricketComponent {
   private http = inject(HttpClient);
   // private apiBaseUrl = 'http://localhost:3001/api/cricket';
-  private apiBaseUrl ='https://vel-future.onrender.com';
+  private apiBaseUrl ='https://vel-future.onrender.com/api/cricket';
 
   // Angular 22 Signals
   isLoading = signal<boolean>(false);

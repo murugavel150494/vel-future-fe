@@ -14,7 +14,8 @@ export class Login {
   private http = inject(HttpClient);
   
   // Backend running on port 3001
-  private apiBaseUrl = 'http://localhost:3001/api/auth';
+  // private apiBaseUrl = 'http://localhost:3001/api/auth';
+  private apiBaseUrl ='https://vel-future.onrender.com/api/auth';
 
   username = signal<string>('');
   password = signal<string>('');
